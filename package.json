@@ -2,7 +2,9 @@
   "name": "purifycss-extracter-html",
   "version": "1.0.0",
   "description": "Html extracter for purifycss - get all selectors from a html file",
-  "main": "index.js",
+  "main": "./lib/purifyhtml.js",
+  "module": "./lib/purifyhtml.es.js",
+  "jsnext:main": "./lib/purifyhtml.es.js",
   "scripts": {
     "dev": "rollup -c rollup.config.js -w",
     "build": "rollup -c rollup.config.js",
