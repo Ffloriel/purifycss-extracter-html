@@ -1,28 +1,36 @@
-import posthtml from "posthtml"
-import match from "posthtml-match-helper"
+import parse5 from "parse5"
 
-var selectors = []
-const postHTMLSelectors = tree => {
-    // get all classes
-    tree.match({ attrs: { class: true } }, node => {
-        node.attrs.class.split(" ").forEach(item => {
-            selectors.push(item)
-        })
-    })
-    tree.match({ attrs: { id: true } }, node => {
-        node.attrs.id.split(" ").forEach(item => {
-            selectors.push(item)
-        })
-    })
+const getSelectorsInNodes = node => {
+    let selectors = []
+    for (let childNode of node.children) {
+        if (childNode.type === "tag") {
+            let tag, classes = [], ids = []
+            // add tag name
+            tag = childNode.name
+            // add classes names
+            if (childNode.attribs) {
+                if (childNode.attribs.class)
+                    classes = childNode.attribs.class.split(" ")
+                if (childNode.attribs.id) ids = childNode.attribs.id.split(" ")
+            }
+            selectors = [
+                ...selectors,
+                tag,
+                ...classes,
+                ...ids,
+                ...getSelectorsInNodes(childNode)
+            ]
+        }
+    }
     return selectors
 }
 
 class PurifyCssExtracterHtml {
     static extract(content) {
-        //let selectors = []
-        selectors = []
-        posthtml().use(postHTMLSelectors).process(content, { sync: true })
-        return selectors
+        const tree = parse5.parse(content, {
+            treeAdapter: parse5.treeAdapters.htmlparser2
+        })
+        return getSelectorsInNodes(tree)
     }
 }
 
