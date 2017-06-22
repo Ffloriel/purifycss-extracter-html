@@ -36,6 +36,6 @@
     "rollup-watch": "^4.0.0"
   },
   "dependencies": {
-    "posthtml": "^0.9.2"
+    "parse5": "^3.0.2"
   }
 }

@@ -22,6 +22,6 @@ export default {
             presets: [["es2015", { modules: false }]]
         })
     ],
-    external: ["posthtml"],
+    external: ["parse5"],
     sourceMap: false
 }
